@@ -1,0 +1,24 @@
+---
+- hosts: GroupTesting
+  tasks:
+  - name: install firewalld,openssl,openssl-devel
+    shell: >
+      systemctl enable firewalld &&
+      systemctl start firewalld
+  - name: 防火墙开启80端口
+    firewalld:
+      zone: public
+      port: 80/tcp
+      permanent: true
+      state: enabled
+      immediate: yes
+  - name: 防火墙开启443端口
+    firewalld: zone=public port=443/tcp permanent=true state=enabled immediate=yes
+  - name: 防火墙开启4443端口
+    firewalld: zone=public port=4443/tcp permanent=true state=enabled immediate=yes
+  - name: 防火墙开启1514端口
+    firewalld: zone=public port=1514/tcp permanent=true state=enabled immediate=yes
+  - name: 防火墙开启9081端口(yum)
+    firewalld: zone=public port=9081/tcp permanent=true state=enabled immediate=yes
+  - name: 重启firewalld,使得配置生效
+    shell: firewall-cmd --reload
